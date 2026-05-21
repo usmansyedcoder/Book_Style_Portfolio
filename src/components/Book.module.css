@@ -1,0 +1,228 @@
+/* ── TOC ── */
+.toc {
+  display: flex;
+  gap: 0;
+  z-index: 10;
+  position: relative;
+  margin-bottom: -1px;
+  filter: drop-shadow(0 -4px 12px rgba(0, 0, 0, 0.5));
+  justify-content: center;
+  width: calc(var(--page-w) * 2 + 24px);
+}
+.tocBtn {
+  background: #3d2010;
+  border: 1px solid #6b3a1f;
+  color: #c8a87a;
+  font-family: "Crimson Pro", serif;
+  font-size: 12.5px;
+  letter-spacing: 0.09em;
+  padding: 7px 18px;
+  border-radius: 4px 4px 0 0;
+  cursor: pointer;
+  transition:
+    background 0.2s,
+    color 0.2s,
+    border-color 0.2s;
+  text-transform: uppercase;
+}
+
+.tocBtn:hover,
+.tocActive {
+  background: var(--paper-dark);
+  color: var(--accent);
+  border-color: var(--paper-dark);
+}
+
+/* ── Book scene ── */
+.scene {
+  perspective: 2200px;
+  width: calc(var(--page-w) * 2 + 20px);
+  height: var(--page-h);
+  position: relative;
+}
+
+/* ── Static pages ── */
+.staticPage {
+  position: absolute;
+  top: 0;
+  width: var(--page-w);
+  height: var(--page-h);
+  background: var(--paper);
+  overflow: hidden;
+}
+
+.left {
+  left: 0;
+  border-radius: 4px 0 0 4px;
+  box-shadow: -4px 4px 20px rgba(0, 0, 0, 0.4);
+}
+.right {
+  right: 0;
+  border-radius: 0 4px 4px 0;
+  box-shadow: 4px 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+/* Page corner curl hint */
+.right::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(225deg, #c8b89a 45%, transparent 46%);
+  pointer-events: none;
+}
+
+/* ── Spine ── */
+.spine {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 20px;
+  height: 100%;
+  background: linear-gradient(to right, #3d1f0a, var(--spine), #3d1f0a);
+  z-index: 5;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.6);
+}
+
+/* ── Shadow ── */
+.shadow {
+  position: absolute;
+  bottom: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  height: 40px;
+  background: radial-gradient(ellipse, rgba(0, 0, 0, 0.5) 0%, transparent 70%);
+  z-index: 0;
+}
+
+/* ── Page number ── */
+.pageNum {
+  position: absolute;
+  bottom: 16px;
+  font-size: 11px;
+  color: var(--ink-muted);
+  font-style: italic;
+  letter-spacing: 0.05em;
+  font-family: "Crimson Pro", serif;
+  pointer-events: none;
+}
+
+/* ── Arrow buttons ── */
+.arrow {
+  position: absolute;
+  bottom: 12px;
+  width: 34px;
+  height: 34px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--accent);
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.7;
+  transition:
+    opacity 0.2s,
+    transform 0.2s;
+  z-index: 20;
+  line-height: 1;
+  font-family: Georgia, serif;
+}
+
+.arrow:hover {
+  opacity: 1;
+  transform: scale(1.25);
+}
+.arrowNext {
+  right: 12px;
+}
+.arrowPrev {
+  left: 12px;
+}
+
+/* ── Flip leaf ── */
+.flipLeaf {
+  position: absolute;
+  top: 0;
+  width: var(--page-w);
+  height: var(--page-h);
+  transform-style: preserve-3d;
+  z-index: 15;
+  pointer-events: none;
+}
+
+/* NEXT: right page flips to the left */
+.flipNext {
+  left: var(--page-w);
+  transform-origin: left center;
+  animation: flipToLeft 0.85s cubic-bezier(0.645, 0.045, 0.355, 1) forwards;
+}
+
+/* PREV: left page flips to the right */
+.flipPrev {
+  left: 0;
+  transform-origin: right center;
+  animation: flipToRight 0.85s cubic-bezier(0.645, 0.045, 0.355, 1) forwards;
+}
+
+@keyframes flipToLeft {
+  from {
+    transform: rotateY(0deg);
+  }
+  to {
+    transform: rotateY(-180deg);
+  }
+}
+
+@keyframes flipToRight {
+  from {
+    transform: rotateY(0deg);
+  }
+  to {
+    transform: rotateY(180deg);
+  }
+}
+
+/* ── Flip faces ── */
+.flipFront,
+.flipBack {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  background: var(--paper);
+  overflow: hidden;
+}
+
+.flipNext .flipFront {
+  border-radius: 0 4px 4px 0;
+  box-shadow: 4px 4px 20px rgba(0, 0, 0, 0.3);
+}
+.flipNext .flipBack {
+  border-radius: 4px 0 0 4px;
+  box-shadow: -4px 4px 20px rgba(0, 0, 0, 0.3);
+  transform: rotateY(180deg);
+}
+
+.flipPrev .flipFront {
+  border-radius: 4px 0 0 4px;
+  box-shadow: -4px 4px 20px rgba(0, 0, 0, 0.3);
+}
+.flipPrev .flipBack {
+  border-radius: 0 4px 4px 0;
+  box-shadow: 4px 4px 20px rgba(0, 0, 0, 0.3);
+  transform: rotateY(180deg);
+}
+
+/* ── Hint ── */
+.hint {
+  font-size: 11px;
+  color: rgba(200, 168, 122, 0.45);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-family: "Crimson Pro", serif;
+}
